@@ -5,8 +5,50 @@ ActiveRecord::Base.establish_connection(
 )
 
 class Post < ActiveRecord::Base
-	scope :top3, order("created_at").limit(3)
+	#scope :top3, order("created_at").limit(3)
+    has_many :comments, :dependent => :destroy
 end
+
+class Comment < ActiveRecord::Base
+    belongs_to :post
+end
+
+p Post.all
+p Comment.all
+
+Post.find(1).destroy
+
+p Post.all
+p Comment.all
+
+
+=begin
+post = Post.find(1)
+post.comments.each do |comment|
+	p comment.body
+end
+=end
+
+
+
+#Post.where(:id => 1..2).delete_all
+#Post.find(3).destroy
+#p Post.all
+
+
+
+#post = Post.find(1)
+=begin
+post.title = "(new)title1"
+post.save
+=end
+
+#post.update_attribute(:title, "(new2)title1")
+#post.update_attributes(:title => "nnn", :body => "hhh")
+
+#Post.where(:id => 1..2).update_all(:title => "nnn2", :body => "hhh2")
+
+#p Post.all
 
 #post = Post.new(:title => "title1", :body => "hello1")
 
@@ -44,4 +86,10 @@ post.save
 
 #p Post.order("id desc").limit(3)
 
-p Post.top3
+#p Post.top3
+
+#p Post.where(:title => "title5").first_or_create
+#Post.where(:title => "title6").first_or_create do |p|
+	#p.body = "hello6"
+#end
+#p Post.all
